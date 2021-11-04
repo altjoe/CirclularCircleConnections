@@ -1,4 +1,4 @@
-int gridsize = 20;
+int gridsize = 40;
 ArrayList<Orb> orbs = new ArrayList<Orb>();
 ArrayList<FadingCircle> circles = new ArrayList<FadingCircle>();
 color from;
@@ -27,7 +27,7 @@ void draw() {
       orb.move();
    }
    draw_circle();
-   // draw_line();
+   draw_line();
    for (int i = circles.size()-1; i >= 0; i--) {
       FadingCircle circle = circles.get(i);
       if (circle.frames > 0){
@@ -64,7 +64,7 @@ class FadingCircle {
    color c;
    float x;
    float y;
-   float frames = int(random(10, 60));
+   float frames = 30;
    float size;
 
    public FadingCircle(float x0, float y0, color c0, float size0){
@@ -107,9 +107,16 @@ class Orb {
    float ypos;
    float speed = 0.5;
    public Orb(float x, float y){
-      orbsize = random(1,2) * height/50.0;
-      x_speed = random(-speed, speed);
-      y_speed = random(-speed, speed);
+      orbsize = height/100.0;
+      // x_speed = random(-speed, speed);
+      // y_speed = random(-speed, speed);
+      float dirx = x - width/2;
+      float diry = y - height/2;
+      float mag = sqrt((dirx * dirx) + (diry * diry));
+      dirx = dirx / mag;
+      diry = diry / mag;
+      x_speed = -dirx;
+      y_speed = -diry;
       xpos = x;
       ypos = y;
    }
@@ -121,12 +128,13 @@ class Orb {
    }
    
    void move(){
-      if (xpos + x_speed + orbsize/2 > width || xpos + x_speed - orbsize/2 < 0){
+      if (xpos + x_speed + orbsize > width || xpos + x_speed - orbsize < 0){
          x_speed *= -1;
       }
-      if (ypos + y_speed + orbsize/2 > height || ypos + y_speed - orbsize/2 < 0){
+      if (ypos + y_speed + orbsize > height || ypos + y_speed - orbsize < 0){
          y_speed *= -1;
       }
+
       xpos = xpos + x_speed;
       ypos = ypos + y_speed;
    } 
